@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@zegocloud/zego-uikit-prebuilt": "^1.11.0",
+    "bootstrap": "^5.3.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-bootstrap": "^2.10.1",
+    "react-dom": "^18.2.0",
+    "zego-superboard-web": "^2.14.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",

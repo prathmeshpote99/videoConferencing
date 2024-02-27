@@ -1,5 +1,8 @@
 import * as React from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
+import { ZegoSuperBoardManager } from "zego-superboard-web";
 
 function randomID(len) {
   let result = "";
@@ -20,7 +23,8 @@ export function getUrlParams(url = window.location.href) {
 }
 
 export default function App() {
-  const roomID = getUrlParams().get("roomID") || randomID(5);
+  // const roomID = getUrlParams().get("roomID") || randomID(5);
+  const roomID = getUrlParams().get("roomID") || "XYZ123";
   let myMeeting = async (element) => {
     // generate Kit Token
     const appID = 367909475;
@@ -35,6 +39,7 @@ export default function App() {
 
     // Create instance object from Kit Token.
     const zp = ZegoUIKitPrebuilt.create(kitToken);
+    zp.addPlugins({ ZegoSuperBoardManager });
     // start the call
     zp.joinRoom({
       container: element,
@@ -51,16 +56,36 @@ export default function App() {
         },
       ],
       scenario: {
-        mode: ZegoUIKitPrebuilt.GroupCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
+        mode: ZegoUIKitPrebuilt.VideoConference, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
       },
+      preJoinViewConfig: {
+        title: "Catch", // The title of the prejoin view. Uses "enter Room" by default.
+      },
+      whiteboardConfig: {
+        showCreateAndCloseButton: true, // Whether to display the button that is used to create/turn off the whiteboard. Displayed by default.
+        showAddImageButton: true,
+      },
+      showPreJoinView: false,
+      maxUsers: 50,
+      showRoomTimer: true,// Whether to display the timer. Not displayed by default.
+      showRoomDetailsButton: true,// Whether to display the button that is used to check the room details. Displayed by default.
+      showInviteToCohostButton: true,// Whether to show the button that is used to invite the audience to co-host on the host end.
+      showRemoveCohostButton: true,// Whether to show the button that is used to remove the audience on the host end.
+      showRequestToCohostButton: true,// Whether to show the button that is used to request to co-host on the audience end.
+      autoHideFooter: false,// Whether to automatically hide the footer (bottom toolbar), auto-hide by default. This only applies to mobile browsers.
+      enableUserSearch: true
     });
   };
 
   return (
     <div
-      className="myCallContainer"
       ref={myMeeting}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{
+        width: "100vw",
+        height: "100vh",
+        overflowX: "hidden",
+        overflowY: "hidden",
+      }}
     ></div>
   );
 }
